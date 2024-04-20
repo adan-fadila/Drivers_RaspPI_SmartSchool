@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>GPIO Control</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f0f0;
+            margin: 40px;
+        }
+        .container {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin: auto;
+            width: 50%;
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .status {
+            margin-top: 20px;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>GPIO Control Interface</h1>
+        
+        <h2>LED Control</h2>
+        <form action="/on" method="POST">
+            <button type="submit">Turn LED On</button>
+        </form>
+        <form action="/off" method="POST">
+            <button type="submit">Turn LED Off</button>
+        </form>
+        <form action="/auto" method="POST">
+            <button type="submit">Automatic Control</button>
+        </form>
+        <div>
+           <p>Current Mode: {{ 'Manual' if manual_control else 'Automatic' }}</p>
+   	</div>	
+        <h2>PIR Sensor Status</h2>
+        <div class="status">
+            {% if pir_status is defined %}
+                <p>PIR Sensor detected motion: {{ pir_status }}</p>
+            {% else %}
+                <p>PIR Sensor status not available.</p>
+            {% endif %}
+        </div>
+        <form action="/read_pir" method="get">
+            <button type="submit">Read PIR Sensor</button>
+        </form>
+    </div>
+</body>
+</html>
