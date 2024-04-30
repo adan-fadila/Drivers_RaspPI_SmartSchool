@@ -30,11 +30,15 @@ def create_app():
     PIR_PIN = int(os.getenv('PIR_PIN', '11'))
     NODE_SERVER_ADDRESS = os.getenv('NODE_SERVER_ADDRESS', '10.100.102.8')
     NODE_SERVER_PORT = os.getenv('NODE_SERVER_PORT', '8001')
-
+    SPACE_ID = os.getenv('SPACE_ID', '61097711')  # Default or fetched from .env
+    ROOM_ID = os.getenv('ROOM_ID', '38197016')  
+    DEVICE_ID = os.getenv('DEVICE_ID', '65109692') 
+    ClientIP = os.getenv('ClientIP', '10.100.102.14')
+    
     # Create instances of the GPIO manager and server communicator
     gpio_manager = GPIOManager(LED_PIN, RELAY_PIN, PIR_PIN)
     server_communicator = ServerCommunicator(NODE_SERVER_ADDRESS, NODE_SERVER_PORT)
-    motion_sensor_monitor = MotionSensorMonitor(gpio_manager, server_communicator)
+    motion_sensor_monitor = MotionSensorMonitor(gpio_manager, server_communicator, SPACE_ID, ROOM_ID, DEVICE_ID, ClientIP)
     
     # Create the web controller, which sets up routes
     web_controller = WebController(app, motion_sensor_monitor)

@@ -20,10 +20,17 @@ class ServerCommunicator:
                 print(f"Server check failed: {e}")
                 return False
 
-    def send_request_to_node(self, state):
+    def send_request_to_node(self, state, space_id, room_id, device_id, raspberryPiIP):
         url = f"http://{self.address}:{self.port}/api-sensors/motion-detected"
+        payload = {
+            "state": state,
+            "space_id": space_id,
+            "room_id": room_id,
+            "device_id": device_id,
+            "raspberry_pi_ip": raspberryPiIP
+        }
         try:
-            response = requests.post(url, json={"state": state}, timeout=5)
+            response = requests.post(url, json=payload, timeout=5)
             if response.status_code == 200:
                 print(f"Light {state} request successful: {response.status_code}")
                 return True

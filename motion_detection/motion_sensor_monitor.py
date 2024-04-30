@@ -6,9 +6,13 @@ from motion_detection.gpio_manager import GPIOManager
 from motion_detection.server_communicator import ServerCommunicator
 
 class MotionSensorMonitor:
-    def __init__(self, gpio_manager, server_communicator):
+    def __init__(self, gpio_manager, server_communicator ,space_id, room_id, device_id, raspberryPiIP):
         self.gpio_manager = gpio_manager
         self.server_communicator = server_communicator
+        self.space_id = space_id
+        self.room_id = room_id
+        self.device_id = device_id
+        self.raspberryPiIP = raspberryPiIP
         self.manual_control = False
         self.led_status = False
         self.thread = threading.Thread(target=self.monitor_pir, daemon=True)
@@ -30,7 +34,7 @@ class MotionSensorMonitor:
             time.sleep(0.1)
     
     def trigger_led_relay(self, state):
-        if state == "on" and self.server_communicator.is_server_running() and self.server_communicator.send_request_to_node(state):
+        if state == "on" and self.server_communicator.is_server_running() and self.server_communicator.send_request_to_node(state, self.space_id, self.room_id, self.device_id , self.raspberryPiIP):
             self.gpio_manager.led_relay_on()
             self.led_status = True
             print("Bulb ON, Relay LOW")
@@ -38,7 +42,7 @@ class MotionSensorMonitor:
             self.gpio_manager.led_relay_off()
             self.led_status = False
             print("Bulb OFF, Relay HIGH")
-            self.server_communicator.send_request_to_node(state)
+            self.server_communicator.send_request_to_node(state, self.space_id, self.room_id, self.device_id, self.raspberryPiIP)
     
     def start_monitoring(self):
         self.thread.start()

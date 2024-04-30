@@ -8,26 +8,26 @@ class WebController:
         self.app = app
         self.sensor_monitor = sensor_monitor
 
-        # Setting up routes
-        @app.route("/")
-        def index():
-            # Renders the index.html with the current manual control status
-            return render_template('index.html', manual_control=self.sensor_monitor.manual_control)
+        # Setting up routes within the Flask app
+        app.add_url_rule("/", "index", self.index)
+        app.add_url_rule("/<action>", "action", self.action, methods=['GET', 'POST'])
 
-        @app.route("/<action>", methods=['GET', 'POST'])
-        def action(action):
-            # Route to handle actions like turning on, off, or setting to automatic
-            if action == "on":
-                self.sensor_monitor.trigger_led_relay("on")
-                self.sensor_monitor.set_manual_control(True)
-            elif action == "off":
-                self.sensor_monitor.trigger_led_relay("off")
-                self.sensor_monitor.set_manual_control(False)
-            elif action == "auto":
-                self.sensor_monitor.set_manual_control(False)
-            return render_template('index.html', manual_control=self.sensor_monitor.manual_control)
+    def index(self):
+        """Renders the index.html with the current manual control status."""
+        return render_template('index.html', manual_control=self.sensor_monitor.manual_control)
 
-# The instance of WebController should be created in the main app module where you set up the Flask application
-# Example of instantiation in app.py:
+    def action(self, action):
+        """Route to handle actions like turning on, off, or setting to automatic."""
+        if action == "on":
+            self.sensor_monitor.trigger_led_relay("on")
+            self.sensor_monitor.set_manual_control(True)
+        elif action == "off":
+            self.sensor_monitor.trigger_led_relay("off")
+            self.sensor_monitor.set_manual_control(False)
+        elif action == "auto":
+            self.sensor_monitor.set_manual_control(False)
+        return render_template('index.html', manual_control=self.sensor_monitor.manual_control)
+
+# Example usage, assuming the sensor monitor is properly instantiated elsewhere
 # sensor_monitor = MotionSensorMonitor(gpio_manager, server_communicator)
 # web_controller = WebController(app, sensor_monitor)
