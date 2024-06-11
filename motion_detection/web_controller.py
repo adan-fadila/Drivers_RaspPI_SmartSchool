@@ -1,33 +1,62 @@
-from flask import Flask, render_template
-from motion_detection.motion_sensor_monitor import MotionSensorMonitor
-
-app = Flask(__name__)
+from flask import Flask, jsonify, request
 
 class WebController:
     def __init__(self, app, sensor_monitor):
         self.app = app
         self.sensor_monitor = sensor_monitor
+        self.setup_routes()
 
-        # Setting up routes within the Flask app
-        app.add_url_rule("/", "index", self.index)
-        app.add_url_rule("/<action>", "action", self.action, methods=['GET', 'POST'])
+    def setup_routes(self):
+        self.app.add_url_rule("/", "index", self.index)
+        self.app.add_url_rule("/<action>", "action", self.action, methods=['GET', 'POST'])
 
     def index(self):
-        """Renders the index.html with the current manual control status."""
-        return render_template('index.html', manual_control=self.sensor_monitor.manual_control)
+        """Render the index page with the current manual control status."""
+        return jsonify({"manual_control": self.sensor_monitor.manual_control})
 
     def action(self, action):
-        """Route to handle actions like turning on, off, or setting to automatic."""
+        """Handle actions from the web interface to control the system."""
+        response = {}
+
         if action == "on":
             self.sensor_monitor.trigger_led_relay("on")
             self.sensor_monitor.set_manual_control(True)
+            response["message"] = "Turned LED on."
         elif action == "off":
             self.sensor_monitor.trigger_led_relay("off")
             self.sensor_monitor.set_manual_control(False)
+            response["message"] = "Turned LED off."
         elif action == "auto":
             self.sensor_monitor.set_manual_control(False)
-        return render_template('index.html', manual_control=self.sensor_monitor.manual_control)
+            response["message"] = "Switched to automatic mode."
 
-# Example usage, assuming the sensor monitor is properly instantiated elsewhere
-# sensor_monitor = MotionSensorMonitor(gpio_manager, server_communicator)
-# web_controller = WebController(app, sensor_monitor)
+        return jsonify(response)
+
+
+# from flask import Flask, render_template, jsonify, request
+
+# class WebController:
+#     def __init__(self, app, sensor_monitor):
+#         self.app = app
+#         self.sensor_monitor = sensor_monitor
+#         self.setup_routes()
+
+#     def setup_routes(self):
+#         self.app.add_url_rule("/", "index", self.index)
+#         self.app.add_url_rule("/<action>", "action", self.action, methods=['GET', 'POST'])
+
+#     def index(self):
+#         """Render the index page with the current manual control status."""
+#         return render_template('index.html', manual_control=self.sensor_monitor.manual_control)
+
+#     def action(self, action):
+#         """Handle actions from the web interface to control the system."""
+#         if action == "on":
+#             self.sensor_monitor.trigger_led_relay("on")
+#             self.sensor_monitor.set_manual_control(True)
+#         elif action == "off":
+#             self.sensor_monitor.trigger_led_relay("off")
+#             self.sensor_monitor.set_manual_control(False)
+#         elif action == "auto":
+#             self.sensor_monitor.set_manual_control(False)
+#         return render_template('index.html', manual_control=self.sensor_monitor.manual_control)
