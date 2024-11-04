@@ -64,6 +64,7 @@ def change_feature_state_service(device_id, state):
         # Assuming response should be JSON
         try:
             json_response = response.json()
+            print(json_response)
             return {'success': True, 'data': json_response}
         except ValueError:
             logging.error(f"Failed to parse JSON, Status Code: {response.status_code}, Response Body: {response.text}")

@@ -7,6 +7,7 @@ from motion_detection.gpio_manager import GPIOManager
 from motion_detection.server_communicator import ServerCommunicator
 from routes.mindolife_route import iot_devices_blueprint
 from routes.sensibo_route import sensibo_blueprint
+from routes.mock_route import devices_blueprint
 
 
 from dotenv import load_dotenv
@@ -19,6 +20,8 @@ load_dotenv()  # This loads the variables from .env
 # Register the blueprint
 app.register_blueprint(iot_devices_blueprint, url_prefix='/api-mindolife')
 app.register_blueprint(sensibo_blueprint, url_prefix='/api-sensibo')
+app.register_blueprint(devices_blueprint, url_prefix='/api-mock')
+
 
 @app.route('/test')
 def test_message():
@@ -47,7 +50,7 @@ def create_app():
     
     # Create the web controller, which sets up routes
     web_controller = WebController(app, motion_sensor_monitor)
-    
+    print(f"room id is : {ROOM_ID}")
     # Start monitoring motion in a separate thread
     motion_sensor_monitor.start_monitoring()
     
@@ -56,11 +59,12 @@ def create_app():
 if __name__ == '__main__':
     # Create the Flask app
     app ,gpio_manager= create_app()
-    
+
+    app.run(debug=True, host='0.0.0.0', port=5009)
     # Run the Flask application
-    try:
-        app.run(debug=False, host='0.0.0.0', port=5009)
-    except KeyboardInterrupt:
-        print("Program stopped")
-    finally:
-        gpio_manager.cleanup()  # This needs to be inside create_app or handled differently
+    # try:
+    #     app.run(debug=True, host='0.0.0.0', port=5009)
+    # except KeyboardInterrupt:
+    #     print("Program stopped")
+    # finally:
+    #     gpio_manager.cleanup()  # This needs to be inside create_app or handled differently

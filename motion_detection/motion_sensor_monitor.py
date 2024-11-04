@@ -1,7 +1,7 @@
 # motion_sensor_monitor.py
 import requests
 from requests.adapters import HTTPAdapter
-from requests.packages.urllib3.util.retry import Retry
+from urllib3.util.retry import Retry
 import threading
 import time
 from motion_detection.gpio_manager import GPIOManager
