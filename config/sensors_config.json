@@ -1,0 +1,26 @@
+{
+  "sensors": {
+    "temperature": [
+      {
+        "device_id": "JArdX73w",
+        "device_type": "sensibo",
+        "location": "livingroom",
+        "name": "Living Room Temperature"
+      }
+    ],
+    "humidity": [
+      {
+        "device_id": "JArdX73w", 
+        "device_type": "sensibo",
+        "location": "livingroom",
+        "name": "Living Room Humidity"
+      }
+    ]
+  },
+  "locations": {
+    "livingroom": {
+      "name": "Living Room",
+      "sensors": ["temperature", "humidity"]
+    }
+  }
+} 

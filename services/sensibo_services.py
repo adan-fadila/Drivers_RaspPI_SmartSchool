@@ -2,6 +2,7 @@ import os
 import requests
 import logging
 from dotenv import load_dotenv
+from services.sensor_config_service import get_room_for_device
 load_dotenv() 
 
 def fetch_ac_state_from_sensibo():
@@ -48,15 +49,40 @@ def fetch_temperature_data_from_sensibo():
             'fields': 'temperature,humidity',
             'apiKey': sensibo_api_key,
         })
-        response.raise_for_status()  # This will raise an HTTPError if the HTTP request returned an unsuccessful status code
+        response.raise_for_status()
         data = response.json()
 
         if data and 'result' in data and len(data['result']) > 0:
             latest_measurements = data['result'][0]
+            # Get the room name from the configuration
+            room_name = get_room_for_device(sensibo_device_id)
+            
+            # If not found in config, try to use from environment variable
+            if not room_name:
+                room_name = os.getenv('ROOM_NAME', 'unknown')
+            
+            # Create a response with normalized sensor readings
+            sensors = []
+            
+            # Add temperature reading if available
+            if 'temperature' in latest_measurements:
+                sensors.append({
+                    'room': room_name,
+                    'sensor': 'temperature',
+                    'value': latest_measurements.get('temperature')
+                })
+            
+            # Add humidity reading if available
+            if 'humidity' in latest_measurements:
+                sensors.append({
+                    'room': room_name,
+                    'sensor': 'humidity',
+                    'value': latest_measurements.get('humidity')
+                })
+            
             return {
                 'success': True,
-                'temperature': latest_measurements.get('temperature'),
-                'humidity': latest_measurements.get('humidity')
+                'sensors': sensors
             }
         else:
             logging.warning("No measurements found in the API response.")
