@@ -1,0 +1,19 @@
+{
+  "actuators": {
+    "ac": [
+      {
+        "device_id": "JArdX73w",
+        "api_key": "sensibo_api_key",
+        "location": "livingroom",
+        "name": "Living Room AC",
+        "actions": ["turn_on", "turn_off", "set_temperature", "set_mode"]
+      }
+    ]
+  },
+  "locations": {
+    "livingroom": {
+      "name": "Living Room",
+      "actuators": ["ac"]
+    }
+  }
+} 
