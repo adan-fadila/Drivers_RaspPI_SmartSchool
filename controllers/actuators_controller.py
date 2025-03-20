@@ -34,12 +34,12 @@ class ActuatorsController(MethodView):
 class ActuatorActionsController(MethodView):
     def get(self):
         """
-        Get names of all actuators from config
+        Get names of all actuators from config along with their types
         """
         try:
-            actuator_names = actuator_config_service.get_all_actuator_names()
-            if actuator_names:
-                return jsonify({'success': True, 'actions': actuator_names}), 200
+            actuators_with_types = actuator_config_service.get_actuators_with_types()
+            if actuators_with_types:
+                return jsonify({'success': True, 'actions': actuators_with_types}), 200
             else:
                 return jsonify({'success': False, 'message': 'No actuator names found'}), 404
         except Exception as e:

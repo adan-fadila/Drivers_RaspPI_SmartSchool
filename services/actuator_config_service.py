@@ -44,6 +44,30 @@ def get_all_actuator_names():
                 
     return names
 
+def get_actuators_with_types():
+    """
+    Get all actuators with their types from the configuration file.
+    
+    Returns:
+        list: List of dictionaries with actuator name and type
+    """
+    config = load_actuator_config()
+    actuators_with_types = []
+    
+    if not config or 'actuators' not in config:
+        return actuators_with_types
+        
+    # Extract names and types from all actuator types
+    for actuator_type, actuators in config['actuators'].items():
+        for actuator in actuators:
+            if 'name' in actuator:
+                actuators_with_types.append({
+                    'name': actuator['name'],
+                    'type': actuator_type
+                })
+                
+    return actuators_with_types
+
 def get_all_locations():
     """
     Get all configured locations.
