@@ -69,3 +69,39 @@ def get_room_for_device(device_id):
                 return location_id  # Fall back to location ID if location name not found
     
     return None 
+
+def get_sensors_by_location(location_id=None):
+    """
+    Get all sensors available in a specific location or all locations.
+    
+    Args:
+        location_id (str, optional): The location ID to filter by. If None, returns all locations with their sensors.
+        
+    Returns:
+        dict: Dictionary containing locations and their available sensors
+    """
+    config = load_sensor_config()
+    result = {}
+    
+    if not config or 'locations' not in config:
+        return result
+    
+    locations = config['locations']
+    
+    # Filter by location_id if provided
+    if location_id:
+        if location_id in locations:
+            location_data = locations[location_id]
+            result[location_id] = {
+                'name': location_data.get('name', location_id),
+                'sensors': location_data.get('sensors', [])
+            }
+    else:
+        # Return all locations and their sensors
+        for loc_id, loc_data in locations.items():
+            result[loc_id] = {
+                'name': loc_data.get('name', loc_id),
+                'sensors': loc_data.get('sensors', [])
+            }
+    
+    return result 
