@@ -1,17 +1,21 @@
 # app.py
 
 from flask import Flask
-from motion_detection.web_controller import WebController
-from motion_detection.motion_sensor_monitor import MotionSensorMonitor
-from motion_detection.gpio_manager import GPIOManager
-from motion_detection.server_communicator import ServerCommunicator
+# from motion_detection.web_controller import WebController
+# from motion_detection.motion_sensor_monitor import MotionSensorMonitor
+# from motion_detection.gpio_manager import GPIOManager
+# from motion_detection.server_communicator import ServerCommunicator
 from routes.mindolife_route import iot_devices_blueprint
 from routes.sensibo_route import sensibo_blueprint
 from routes.sensors_route import sensors_blueprint
 from routes.hue_route import hue_api_blueprint
 from controllers.actuators_controller import actuators_blueprint
 
+from routes.motion_route import motion_sensor_blueprint  # Import the blueprint
 
+
+
+# Register the Blueprint
 from dotenv import load_dotenv
 import os
 
@@ -20,6 +24,7 @@ load_dotenv()  # This loads the variables from .env
 
 # Route Gateway
 # Register the blueprint
+app.register_blueprint(motion_sensor_blueprint, url_prefix='/api-motion')  # All
 app.register_blueprint(hue_api_blueprint, url_prefix='/api-hue')
 app.register_blueprint(iot_devices_blueprint, url_prefix='/api-mindolife')
 app.register_blueprint(sensibo_blueprint, url_prefix='/api-sensibo')
@@ -47,21 +52,21 @@ def create_app():
     ClientIP = os.getenv('ClientIP', '192.168.1.107')
     user_oid = "65b76f020db757311fe54f38"    
     # Create instances of the GPIO manager and server communicator
-    gpio_manager = GPIOManager(LED_PIN, RELAY_PIN, PIR_PIN)
-    server_communicator = ServerCommunicator(NODE_SERVER_ADDRESS, NODE_SERVER_PORT)
-    motion_sensor_monitor = MotionSensorMonitor(gpio_manager, server_communicator, SPACE_ID, ROOM_ID, ROOM_NAME, DEVICE_ID, ClientIP, user_oid)
+    # gpio_manager = GPIOManager(LED_PIN, RELAY_PIN, PIR_PIN)
+    # server_communicator = ServerCommunicator(NODE_SERVER_ADDRESS, NODE_SERVER_PORT)
+    # motion_sensor_monitor = MotionSensorMonitor(gpio_manager, server_communicator, SPACE_ID, ROOM_ID, ROOM_NAME, DEVICE_ID, ClientIP, user_oid)
     
     # Create the web controller, which sets up routes
-    web_controller = WebController(app, motion_sensor_monitor)
+    # web_controller = WebController(app, motion_sensor_monitor)
     
     # Start monitoring motion in a separate thread
-    motion_sensor_monitor.start_monitoring()
+    # motion_sensor_monitor.start_monitoring()
     
-    return app ,gpio_manager
+    return app 
 
 if __name__ == '__main__':
     # Create the Flask app
-    app ,gpio_manager= create_app()
+    app= create_app()
     
     # Run the Flask application
     try:
@@ -69,4 +74,4 @@ if __name__ == '__main__':
     except KeyboardInterrupt:
         print("Program stopped")
     finally:
-        gpio_manager.cleanup()  # This needs to be inside create_app or handled differently
+        GPIO.cleanup()
