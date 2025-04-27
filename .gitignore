@@ -1,1 +1,61 @@
+# Python bytecode files
+*.pyc
+*.pyo
+__pycache__/
+
+# Flask specific ignores
+instance/
+*.log
+
+# Virtual environment directory (common names)
+venv/
+env/
+.venv/
+venv.bak/
+
+# IDE and editor-specific files (e.g., VSCode, PyCharm)
+.vscode/
+.idea/
+
+# Jupyter notebook checkpoints
+.ipynb_checkpoints/
+
+# Other common Python artifacts
+*.db
+*.sqlite3
+
+# Configuration files for secrets (e.g., don't commit credentials)
+*.env
 .env
+*.ini
+
+# MacOS Finder metadata
+.DS_Store
+
+# Windows-specific files
+Thumbs.db
+Desktop.ini
+
+# Coverage reports (for testing)
+.coverage
+*.cover
+*.py,cover
+
+# Pytest cache
+.pytest_cache/
+
+# Mypy type checking
+.mypy_cache/
+
+# Build directories
+build/
+dist/
+*.egg-info/
+
+# Flask configurations (if any)
+config.py
+*.bak
+
+# Temporary files
+*.swp
+*.swo

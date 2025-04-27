@@ -8,6 +8,7 @@ from motion_detection.server_communicator import ServerCommunicator
 from routes.mindolife_route import iot_devices_blueprint
 from routes.sensibo_route import sensibo_blueprint
 from routes.sensors_route import sensors_blueprint
+from routes.hue_route import hue_api_blueprint
 from controllers.actuators_controller import actuators_blueprint
 
 
@@ -19,6 +20,7 @@ load_dotenv()  # This loads the variables from .env
 
 # Route Gateway
 # Register the blueprint
+app.register_blueprint(hue_api_blueprint, url_prefix='/api-hue')
 app.register_blueprint(iot_devices_blueprint, url_prefix='/api-mindolife')
 app.register_blueprint(sensibo_blueprint, url_prefix='/api-sensibo')
 app.register_blueprint(sensors_blueprint, url_prefix='/api-sensors')

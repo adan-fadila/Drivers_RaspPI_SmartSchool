@@ -15,12 +15,20 @@
         "location": "livingroom",
         "name": "Living Room Humidity"
       }
+    ],
+    "motion": [
+      {
+        "device_id": "mption-sensor-id-123", 
+        "device_type": "motion-sensor",
+        "location": "livingroom",
+        "name": "Living Room motion-sensor"
+      }
     ]
   },
   "locations": {
     "livingroom": {
       "name": "Living Room",
-      "sensors": ["temperature", "humidity"]
+      "sensors": ["temperature", "humidity","motion"]
     }
   }
 } 

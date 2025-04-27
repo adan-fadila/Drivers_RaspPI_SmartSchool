@@ -6,14 +6,33 @@
         "api_key": "sensibo_api_key",
         "location": "livingroom",
         "name": "Living Room AC",
-        "actions": ["turn_on", "turn_off", "set_temperature", "set_mode"]
+        "actions": [
+          "turn_on",
+          "turn_off",
+          "set_temperature",
+          "set_mode"
+        ]
+      }
+    ],
+    "light": [
+      {
+        "device_id": "1",
+        "api_key": "hue_api_key",
+        "location": "livingroom",
+        "name": "Living Room LIGHT",
+        "actions": [
+          "turn_on",
+          "turn_off"
+        ]
       }
     ]
   },
   "locations": {
     "livingroom": {
       "name": "Living Room",
-      "actuators": ["ac"]
+      "actuators": [
+        "ac"
+      ]
     }
   }
-} 
+}
