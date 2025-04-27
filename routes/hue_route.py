@@ -1,11 +1,16 @@
-# hue_api.py
 from flask import Blueprint, request, jsonify
 import requests
+import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 hue_api_blueprint = Blueprint('hue_api', __name__)
 
-HUE_API_URL = "https://192.168.0.102/clip/v2/resource/light"  # Hue API base URL
-HUE_APP_KEY = "2VagrIe7hNsInNtjiJAHatKJZMDlb1PQPjbDYdVD"  # Hue Application Key
+# Read them safely from environment
+HUE_API_URL = os.getenv("HUE_API_URL")
+HUE_APP_KEY = os.getenv("HUE_APP_KEY")
 
 @hue_api_blueprint.route('/get_light_state', methods=['GET'])
 def get_light_state():
