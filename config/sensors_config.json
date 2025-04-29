@@ -19,9 +19,9 @@
     "motion": [
       {
         "device_id": "mption-sensor-id-123", 
-        "device_type": "motion-sensor",
+        "device_type": "motion",
         "location": "livingroom",
-        "name": "Living Room motion-sensor"
+        "name": "Living Room motion"
       }
     ]
   },
